@@ -1,3 +1,16 @@
-= Banner Rotator
+h1. Banner Rotator
 
-Description goes here
+A simple extension to support rotating banners on pages.  Banners can be turned on and off via the page-editing interface and associated with any number of pages.  Banners, when not directly associated with a page, are inherited from the nearest ancestor page.  Banners are randomly selected based on weights between 1 and 10 (1 being least likely, 10 most likely to appear).
+
+The focus is on image-based banners that work by specifying a background and/or foreground image and a link.
+
+Currently this does not support file uploads, and should be used in concert with an asset management extension if direct file upload access is not available.
+
+h2. Contributors
+
+* Sean Cribbs
+* Andrew vonderLuft
+
+h2. Acknowledgments
+
+Thanks to Con-way for funding the initial development of this extension.
