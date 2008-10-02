@@ -1,0 +1,43 @@
+- include_javascript 'lowpro'
+- content_for :page_css do
+  :sass
+    td.banner
+      &:hover
+        background-color: #ffc
+      .snapshot
+        background-color: white
+        width: 300px
+        height: 175px
+        overflow: hidden
+        border: 1px solid silver
+        margin: 10px
+      .name
+        text-align: center
+        margin-bottom: 8px
+        a, a:visited
+          color: black
+        a:hover
+          text-decoration: underline
+    a.add-link
+      padding-left: 16px
+      background: url(/images/admin/plus.png) left center no-repeat
+
+%p{:style => 'float: right'}
+  = link_to 'New banner', new_banner_path, :class => 'add-link'
+
+%h1 Banners
+
+- if @banners.blank?
+  %p{:style => 'text-align: center'}
+    %em There are no banners defined!
+- else
+  %table
+    - @banners.in_groups_of(3).each do |row|
+      %tr
+        - row.compact.each do |banner|
+          %td.banner
+            %a{:href => edit_banner_path(banner)}
+              .snapshot{:style => "background: url(#{banner.background_image}) center center no-repeat"}
+                - unless banner.foreground_image.blank?
+                  %img{:src => banner.foreground_image, :alt => "Preview"}/
+            .name= link_to banner.name, edit_banner_path(banner)
