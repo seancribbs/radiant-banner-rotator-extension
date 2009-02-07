@@ -12,8 +12,8 @@ class Banner < ActiveRecord::Base
   
   private
     def create_placements
+      self.banner_placements.clear
       if @placements
-        self.banner_placements.clear
         @placements.each do |hash|
           self.banner_placements.create(hash)
         end

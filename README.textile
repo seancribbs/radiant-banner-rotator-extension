@@ -6,10 +6,13 @@ The focus is on image-based banners that work by specifying a background and/or 
 
 Currently this does not support file uploads, and should be used in concert with an asset management extension if direct file upload access is not available.
 
+For the moment, use this fork of the banner rotator if you are on radiant 7.0
+
 h2. Contributors
 
 * Sean Cribbs
 * Andrew vonderLuft
+* Jeffrey Jones
 
 h2. Acknowledgments
 

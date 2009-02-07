@@ -1,4 +1,4 @@
-module BannersHelper
+module Admin::BannersHelper
   def pages_for_select
     @pages_for_select ||= begin
       collect_children = lambda do |page|

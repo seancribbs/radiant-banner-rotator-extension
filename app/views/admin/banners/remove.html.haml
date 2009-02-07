@@ -1,0 +1,44 @@
+- content_for :page_css do
+  :sass
+    td.banner
+      &:hover
+        background-color: #ffc
+      .snapshot
+        background-color: white
+        width: 300px
+        height: 175px
+        overflow: hidden
+        border: 1px solid silver
+        margin: 0px 10px 0px 10px
+      .name, .modify
+        text-align: center
+        margin-top: 3px
+        margin-bottom: 3px
+        a, a:visited
+          color: black
+        a:hover
+          text-decoration: underline
+    a.add-link
+      padding-left: 16px
+      background: url(/images/admin/plus.png) left center no-repeat
+
+%h1 Remove Banner
+
+%p
+  Are you sure you want to
+  %strong.warning permanently remove
+  the following banner?
+
+%table
+  %tr
+    %td.banner
+      .name= @banner.name
+      .snapshot{:style => "background: url(#{@banner.background_image}) center center no-repeat"}
+        - unless @banner.foreground_image.blank?
+          %img{:src => @banner.foreground_image, :alt => "Preview"}/
+
+- form_for [:admin, @banner], :html => {:method => :delete} do
+  %p.buttons
+    %input.button{:type=>"submit", :value=>"Delete Banner"}/
+    or
+    = link_to 'Cancel', admin_banners_url

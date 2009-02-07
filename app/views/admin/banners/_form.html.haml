@@ -32,7 +32,7 @@
   = select_tag "banner[placements][][weight]", options_for_select((1..10).to_a), :title => 'weight'
   = link_to_function 'Remove', 'this.up().remove();', :class => 'delete-link'
 
-- form_for @banner do |f|
+- form_for [:admin, @banner] do |f|
   .form-area
     %p.title
       = f.label :name
@@ -72,4 +72,4 @@
   %p.buttons
     = save_model_button(@banner)
     or
-    = link_to "Cancel", banners_path
+    = link_to "Cancel", admin_banners_path

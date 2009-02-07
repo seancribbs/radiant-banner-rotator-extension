@@ -1,4 +1,3 @@
-- include_javascript 'lowpro'
 - content_for :page_css do
   :sass
     td.banner
@@ -10,10 +9,11 @@
         height: 175px
         overflow: hidden
         border: 1px solid silver
-        margin: 10px
-      .name
+        margin: 0px 10px 0px 10px
+      .name, .modify
         text-align: center
-        margin-bottom: 8px
+        margin-top: 3px
+        margin-bottom: 3px
         a, a:visited
           color: black
         a:hover
@@ -23,7 +23,7 @@
       background: url(/images/admin/plus.png) left center no-repeat
 
 %p{:style => 'float: right'}
-  = link_to 'New banner', new_banner_path, :class => 'add-link'
+  = link_to 'New banner', new_admin_banner_url, :class => 'add-link'
 
 %h1 Banners
 
@@ -36,8 +36,10 @@
       %tr
         - row.compact.each do |banner|
           %td.banner
-            %a{:href => edit_banner_path(banner)}
+            .name=link_to banner.name, edit_admin_banner_path(banner)
+            %a{:href => edit_admin_banner_path(banner)}
               .snapshot{:style => "background: url(#{banner.background_image}) center center no-repeat"}
                 - unless banner.foreground_image.blank?
                   %img{:src => banner.foreground_image, :alt => "Preview"}/
-            .name= link_to banner.name, edit_banner_path(banner)
+            .modify
+              %p= link_to "Remove", remove_admin_banner_path(banner)
