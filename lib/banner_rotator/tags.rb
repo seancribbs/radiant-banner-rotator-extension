@@ -1,4 +1,4 @@
-module BannerRotatorTags
+module BannerRotator::Tags
   include Radiant::Taggable
 
   desc %{

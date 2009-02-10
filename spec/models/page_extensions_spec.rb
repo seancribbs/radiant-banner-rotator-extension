@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe "BannerRotator::PageExtensions" do
-  scenario :pages, :banners
+  dataset :pages, :banners
   
   it "should have some banner and banner placements" do
     pages(:home).should respond_to(:banners)
@@ -16,5 +16,9 @@ describe "BannerRotator::PageExtensions" do
   it "should inherit banners from its ancestors" do
     pages(:article).banner_placements.should == pages(:home).banner_placements
     pages(:article).select_banner.should == banners(:first)
+  end
+  
+  it "should not delete its parent's banner placements when destroyed" do
+    lambda { pages(:radius).destroy }.should_not change(BannerPlacement, :count)
   end
 end

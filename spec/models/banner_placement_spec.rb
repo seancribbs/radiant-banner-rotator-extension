@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe BannerPlacement do
-  scenario :banners
+  dataset :banners
   
   before(:each) do
     @placement = BannerPlacement.new :page_id => 5, :banner_id => 5, :weight => 10

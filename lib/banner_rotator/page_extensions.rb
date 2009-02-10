@@ -2,7 +2,7 @@ module BannerRotator
   module PageExtensions
     def self.included(base)
       base.class_eval do
-        has_many :banner_placements, :dependent => :destroy
+        has_many :banner_placements, :dependent => :delete_all
         has_many :banners, :through => :banner_placements
         
         alias_method_chain :banner_placements, :inheritance

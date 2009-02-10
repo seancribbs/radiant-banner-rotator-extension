@@ -1,5 +1,5 @@
 class BannerRotatorExtension < Radiant::Extension
-  version "1.01"
+  version "1.02"
   description "Allows addition and independent management of rotating banners on pages."
   url "http://con-way.com"
   
@@ -10,13 +10,10 @@ class BannerRotatorExtension < Radiant::Extension
   end
   
   def activate
-    Page.send :include, Admin::BannerRotator::PageExtensions
-    Page.send :include, BannerRotatorTags
+    Page.send :include, BannerRotator::PageExtensions
+    Page.send :include, BannerRotator::Tags
     admin.tabs.add "Banners", '/admin/banners', :after => "Pages", :visibility => [:admin, :developer]
-    admin.page.edit.add :extended_metadata, 'show_banner_meta'
-  end
-  
-  def deactivate
+    admin.pages.edit.add :extended_metadata, 'show_banner_meta'
   end
   
 end

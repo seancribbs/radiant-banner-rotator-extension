@@ -1,4 +1,4 @@
-class BannersScenario < Scenario::Base
+class BannersDataset < Dataset::Base
   uses :pages
   def load
     create_model Banner, :first, :name => "First", :background_image => "test.jpg", :foreground_image => 'front.jpg', :link_target => "_blank", :link_url => "/en/", :image_style => "text-align:right"

@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe "BannerRotator::Tags" do
-  scenario :pages, :banners
+  dataset :pages, :banners
   
   describe "<r:banner>" do
     it "should show a banner if show_banner is true" do
