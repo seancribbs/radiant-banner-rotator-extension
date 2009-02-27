@@ -1,7 +1,7 @@
 class BannerRotatorExtension < Radiant::Extension
-  version "1.02"
+  version "1.0.2"
   description "Allows addition and independent management of rotating banners on pages."
-  url "http://con-way.com"
+  url "http://github.com/avonderluft/radiant-concurrent_draft-extension/tree/master"
   
   define_routes do |map|
     map.namespace :admin, :member => { :remove => :get } do |admin|
