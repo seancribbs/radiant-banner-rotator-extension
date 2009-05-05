@@ -1,4 +1,13 @@
 module Admin::BannersHelper
+
+  def link_or_span_unless_current(params, text, url, options)
+    if options[:id] == params[:view]
+      content_tag(:span, text)
+    else
+      link_to text, url, options
+    end
+  end
+
   def pages_for_select
     @pages_for_select ||= begin
       collect_children = lambda do |page|

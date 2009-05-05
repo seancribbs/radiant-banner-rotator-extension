@@ -1,3 +1,38 @@
+- include_javascript 'admin/tablekit'
+
+%h1 Banners
+
+%ul#banner_view
+  %li#all_view= link_or_span_unless_current(params, "Show All (#{Banner.total_count})", admin_banners_path, :onclick => "Cookies.set('banner_view', 'all');")
+  %li#active_view= link_or_span_unless_current(params, "Show Active Only (#{Banner.total_active_count})", admin_banners_path(:view => 'active'), :onclick => "Cookies.set('banner_view', 'active');", :id => 'active')
+  %li#inactive_view= link_or_span_unless_current(params, "Show Inactive Only (#{Banner.total_inactive_count})", admin_banners_path(:view => 'inactive'), :onclick => "Cookies.set('banner_view', 'inactive');", :id => 'inactive')
+
+%p{:style => 'float: right'}
+  = link_to 'New banner', new_admin_banner_url, :class => 'add-link'
+
+- case params[:view]
+  - when 'active'
+    - @banners = Banner.find_active
+  - when 'inactive'
+    - @banners = Banner.find_inactive
+
+- if @banners.blank?
+  %p{:style => 'text-align: center'}
+    %em= "There are no #{params[:view]} banners defined."
+- else
+  %table
+    - @banners.in_groups_of(3).each do |row|
+      %tr
+        - row.compact.each do |banner|
+          %td.banner
+            .name=link_to banner.name, edit_admin_banner_path(banner)
+            %a{:href => edit_admin_banner_path(banner)}
+              .snapshot{:style => "background: url(#{banner.background_image}) center center no-repeat"}
+                - unless banner.foreground_image.blank?
+                  %img{:src => banner.foreground_image, :alt => "Preview"}/
+            .modify
+              %p= link_to "Remove", remove_admin_banner_path(banner)
+
 - content_for :page_css do
   :sass
     td.banner
@@ -22,24 +57,43 @@
       padding-left: 16px
       background: url(/images/admin/plus.png) left center no-repeat
 
-%p{:style => 'float: right'}
-  = link_to 'New banner', new_admin_banner_url, :class => 'add-link'
+    #banner_view
+      float: left
+      list-style: none
+      margin: -42px 0 0 126px
+      padding: 0
+      li
+        display: inline
+        margin: 0 5px 0 0
+      a, a:visited
+        color: black
+      span
+        border: 1px solid #ffa
+        background-color: #ffd
+    #all_view
+      a, span
+        padding: 5px 5px 5px 25px
+        background-image: url(/images/admin/pictures.png)
+        background-position: 5px center
+        background-repeat: no-repeat
+    #active_view
+      a, span
+        padding: 5px 5px 5px 25px
+        background-image: url(/images/admin/pictures.png)
+        background-position: 5px center
+        background-repeat: no-repeat
+    #inactive_view
+      a, span
+        padding: 5px 5px 5px 25px
+        background-image: url(/images/admin/pictures.png)
+        background-position: 5px center
+        background-repeat: no-repeat
 
-%h1 Banners
-
-- if @banners.blank?
-  %p{:style => 'text-align: center'}
-    %em There are no banners defined!
-- else
-  %table
-    - @banners.in_groups_of(3).each do |row|
-      %tr
-        - row.compact.each do |banner|
-          %td.banner
-            .name=link_to banner.name, edit_admin_banner_path(banner)
-            %a{:href => edit_admin_banner_path(banner)}
-              .snapshot{:style => "background: url(#{banner.background_image}) center center no-repeat"}
-                - unless banner.foreground_image.blank?
-                  %img{:src => banner.foreground_image, :alt => "Preview"}/
-            .modify
-              %p= link_to "Remove", remove_admin_banner_path(banner)
+    html>body
+      #all_view, #active_view, #inactive_view
+        a, span
+          *display: inline-block
+    * html
+      #all_view, #active_view, #inactive_view
+        a, span
+          display: inline-block
