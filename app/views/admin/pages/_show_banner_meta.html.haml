@@ -4,4 +4,12 @@
   %td.field{:style => "text-align: left"}
     %label
       = check_box 'page', 'show_banner'
-      Enable banner rotator
+      Enable banner rotator &nbsp;&nbsp;&nbsp;&nbsp;
+    %label
+      Assigned banners:
+      - unless @page.banners.blank?
+        - @page.banners.each do |banner|
+          &nbsp;
+          = link_to banner.name, edit_admin_banner_path(banner), {:title => "Edit #{banner.name} banner"}
+      - else
+        (none)

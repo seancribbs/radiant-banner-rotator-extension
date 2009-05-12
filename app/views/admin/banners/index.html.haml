@@ -7,7 +7,7 @@
   %li#active_view= link_or_span_unless_current(params, "Show Active Only (#{Banner.total_active_count})", admin_banners_path(:view => 'active'), :onclick => "Cookies.set('banner_view', 'active');", :id => 'active')
   %li#inactive_view= link_or_span_unless_current(params, "Show Inactive Only (#{Banner.total_inactive_count})", admin_banners_path(:view => 'inactive'), :onclick => "Cookies.set('banner_view', 'inactive');", :id => 'inactive')
 
-%p{:style => 'float: right'}
+%p{:style => 'float: right; margin-top: -42px'}
   = link_to 'New banner', new_admin_banner_url, :class => 'add-link'
 
 - case params[:view]
@@ -25,14 +25,24 @@
       %tr
         - row.compact.each do |banner|
           %td.banner
-            .name=link_to banner.name, edit_admin_banner_path(banner)
+            %br
+            .modify
+              =link_to image('remove', :alt => "Remove #{banner.name} banner", :title => "Remove #{banner.name} banner" ), remove_admin_banner_url(banner)
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              =link_to banner.name, edit_admin_banner_path(banner), {:title => "Edit #{banner.name} banner"}
             %a{:href => edit_admin_banner_path(banner)}
               .snapshot{:style => "background: url(#{banner.background_image}) center center no-repeat"}
                 - unless banner.foreground_image.blank?
                   %img{:src => banner.foreground_image, :alt => "Preview"}/
-            .modify
-              %p= link_to "Remove", remove_admin_banner_path(banner)
-
+            .pages
+              On Pages:
+              - unless banner.pages.blank?
+                - banner.pages.each do |page|
+                  &nbsp;
+                  %a{:href => edit_admin_page_url(page), :title => "Edit #{page.title} page"}= page.breadcrumb
+              - else
+                (none)
+            %p
 - content_for :page_css do
   :sass
     td.banner
@@ -45,14 +55,16 @@
         overflow: hidden
         border: 1px solid silver
         margin: 0px 10px 0px 10px
-      .name, .modify
-        text-align: center
+      .name, .modify, .pages
+        text-align: left
         margin-top: 3px
         margin-bottom: 3px
+        margin-left: 16px
         a, a:visited
           color: black
         a:hover
           text-decoration: underline
+
     a.add-link
       padding-left: 16px
       background: url(/images/admin/plus.png) left center no-repeat
