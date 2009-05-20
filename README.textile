@@ -8,6 +8,10 @@ Currently this does not support file uploads, and should be used in concert with
 
 For the moment, use this fork of the banner rotator if you are on radiant 7.0
 
+h2. To do
+
+* Make banners and banner placements draftable via the concurrent_draft extension
+
 h2. Contributors
 
 * Sean Cribbs

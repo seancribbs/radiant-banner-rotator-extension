@@ -26,5 +26,33 @@ module BannerRotator::Tags
     tag "banner:#{att}" do |tag|
       tag.locals.banner.send(att)
     end
+    desc %{
+      Expands the contents if there is a non-empty #{att}.
+
+      *Usage*:
+
+      <pre><code>
+      <r:banner>
+        <r:if_#{att}>Content to display</r:if_#{att}>
+      </r:banner>
+      </code></pre>
+    }
+    tag "banner:if_#{att}" do |tag|
+      tag.expand unless tag.locals.banner[att].blank?
+    end
+    desc %{
+      Expands the contents if there is no #{att}.
+
+      *Usage*:
+
+      <pre><code>
+      <r:banner>
+        <r:unless_#{att}>Content to display</r:unless_#{att}>
+      </r:banner>
+      </code></pre>
+    }
+    tag "banner:unless_#{att}" do |tag|
+      tag.expand if tag.locals.banner[att].blank?
+    end
   end
 end

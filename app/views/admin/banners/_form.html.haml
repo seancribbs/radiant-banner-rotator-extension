@@ -68,8 +68,10 @@
           = select_tag "banner[placements][][page_id]", options_for_select(pages_for_select, p['page_id'])
           = select_tag "banner[placements][][weight]", options_for_select((1..10).to_a, p['weight']), :title => 'weight'
           = link_to_function 'Remove', 'this.up().remove();', :class => 'delete-link'
-
+    = updated_stamp @banner  
+   
   %p.buttons
+    = save_model_and_continue_editing_button(@banner)
     = save_model_button(@banner)
     or
     = link_to "Cancel", admin_banners_path

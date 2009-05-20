@@ -3,7 +3,7 @@ class Banner < ActiveRecord::Base
   has_many :pages, :through => :banner_placements
 
   validates_presence_of :name, :background_image
-
+  
   attr_writer :placements
   after_save :create_placements
 
@@ -18,10 +18,10 @@ class Banner < ActiveRecord::Base
   def inactive?
     ! active?
   end
-
+  
   def self.find_active
     @banners = []
-    self.find(:all).each do |banner|
+    self.find(:all, :order => "name asc").each do |banner|
       @banners << banner if banner.active?
     end
     @banners
@@ -29,7 +29,7 @@ class Banner < ActiveRecord::Base
 
   def self.find_inactive
     @banners = []
-    self.find(:all).each do |banner|
+    self.find(:all, :order => "name asc").each do |banner|
       @banners << banner if banner.inactive?
     end
     @banners
