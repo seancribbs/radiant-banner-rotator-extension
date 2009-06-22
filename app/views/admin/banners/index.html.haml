@@ -3,39 +3,52 @@
 %h1 Banners
 
 %ul#banner_view
-  %li#all_view= link_or_span_unless_current(params, "Show All (#{Banner.total_count})", admin_banners_path, :onclick => "Cookies.set('banner_view', 'all');")
-  %li#active_view= link_or_span_unless_current(params, "Show Active Only (#{Banner.total_active_count})", admin_banners_path(:view => 'active'), :onclick => "Cookies.set('banner_view', 'active');", :id => 'active')
-  %li#inactive_view= link_or_span_unless_current(params, "Show Inactive Only (#{Banner.total_inactive_count})", admin_banners_path(:view => 'inactive'), :onclick => "Cookies.set('banner_view', 'inactive');", :id => 'inactive')
+  %li#all_view= link_or_span_unless_current(params, "Show All (#{Banner.total_count})", admin_banners_path, :onclick => "Cookies.set('banner_view', 'all');", :param => 'view')
+  %li#active_view= link_or_span_unless_current(params, "Show Active Only (#{Banner.total_active_count})", admin_banners_path(:view => 'active'), :onclick => "Cookies.set('banner_view', 'active');", :param => 'view', :id => 'active')
+  %li#inactive_view= link_or_span_unless_current(params, "Show Inactive Only (#{Banner.total_inactive_count})", admin_banners_path(:view => 'inactive'), :onclick => "Cookies.set('banner_view', 'inactive');", :param => 'view', :id => 'inactive')
+  
+- case true
+  - when params[:view] == 'active' && params[:sort] == 'page'
+    - @banners = Banner.find_active_by_pages
+  - when params[:view] == 'active'
+    - @banners = Banner.find_active
+  - when params[:view] == 'inactive'
+    - @banners = Banner.find_inactive
+  - when params[:sort] == 'page'
+    - @banners = Banner.find_all_by_pages
+  - else
+    - @banners = Banner.find(:all, :order => 'name asc')
 
 %p{:style => 'float: right; margin-top: -42px'}
   = link_to 'New banner', new_admin_banner_url, :class => 'add-link'
 
-- case params[:view]
-  - when 'active'
-    - @banners = Banner.find_active
-  - when 'inactive'
-    - @banners = Banner.find_inactive
-  - else
-    - @banners = Banner.find(:all, :order => 'name asc')  
+- unless params[:view] == 'inactive'
+  %h4#banner_sort Sort by:
+  %ul#banner_sort
+    %li#name_sort= link_or_span_unless_current(params, "Banner Name", admin_banners_path, :onclick => "Cookies.set('banner_sort', 'name');", :param => 'sort', :id => 'name')
+    %li#page_sort= link_or_span_unless_current(params, "Assigned Pages", admin_banners_path(:sort => 'page'), :onclick => "Cookies.set('banner_sort', 'page');", :param => 'sort', :id => 'page')
 
 - if @banners.blank?
   %p{:style => 'text-align: center'}
     %em= "There are no #{params[:view]} banners defined."
 - else
-  %table
+  %table{:style => 'margin-top: 24px'}
     - @banners.in_groups_of(3).each do |row|
       %tr
         - row.compact.each do |banner|
           %td.banner
             %br
             .modify
-              =link_to image('remove', :alt => "Remove #{banner.name} banner", :title => "Remove #{banner.name} banner" ), remove_admin_banner_url(banner)
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              =link_to banner.name, edit_admin_banner_path(banner), {:title => "Edit #{banner.name} banner"}
+              =link_to banner.name, edit_admin_banner_path(banner), :title => "Edit #{banner.name} banner"
+              - if banner.active?
+                =link_to 'Deactivate', deactivate_admin_banner_path(banner), :title => "Deactivate #{banner.name} banner (remove from all pages)", :class => 'deactivate-link', :method => :post, :confirm => "Please confirm that you want to deactivate the \"#{banner.name}\" banner, i.e. remove it from all pages?"
+              %br
+              =link_to image('remove', :alt => "Delete #{banner.name} banner", :title => "Delete #{banner.name} banner" ), remove_admin_banner_url(banner), :class => 'remove-link'
             %a{:href => edit_admin_banner_path(banner)}
               .snapshot{:style => "background: url(#{banner.background_image}) center center no-repeat"}
                 - unless banner.foreground_image.blank?
                   %img{:src => banner.foreground_image, :alt => "Preview"}/
+                  
             .pages
               On Pages:
               - unless banner.pages.blank?
@@ -45,6 +58,7 @@
               - else
                 (none)
             %p
+            
 - content_for :page_css do
   :sass
     td.banner
@@ -64,12 +78,23 @@
         margin-left: 16px
         a, a:visited
           color: black
-        a:hover
-          text-decoration: underline
 
     a.add-link
       padding-left: 16px
       background: url(/images/admin/plus.png) left center no-repeat
+      
+    a.deactivate-link
+      float: right
+      padding: 3px 12px 2px 19px
+      margin: -18px 0 0 0
+      background: url(/images/admin/layout_delete.png) 0 0 no-repeat
+      font-size: 10px
+      text-decoration: none
+      
+    a.remove-link
+      float: right
+      padding: 2px 12px 2px 19px
+      margin: -18px 0 0 0
 
     #banner_view
       float: left
@@ -100,6 +125,31 @@
       a, span
         padding: 5px 5px 5px 25px
         background-image: url(/images/admin/pictures.png)
+        background-position: 5px center
+        background-repeat: no-repeat
+        
+    #banner_sort
+      float: left
+      list-style: none
+      margin: -42px 0 0 650px
+      padding: 0
+      li
+        margin: 0px 4px 5px 60px
+      a, a:visited
+        color: black
+      span
+        border: 1px solid #ffa
+        background-color: #ffd
+    #name_sort
+      a, span
+        padding: 2px 2px 2px 25px
+        background-image: url(/images/admin/text_list_numbers.png)
+        background-position: 5px center
+        background-repeat: no-repeat
+    #page_sort
+      a, span
+        padding: 2px 2px 2px 25px
+        background-image: url(/images/admin/text_list_numbers.png)
         background-position: 5px center
         background-repeat: no-repeat
 

@@ -19,12 +19,20 @@ class Banner < ActiveRecord::Base
     ! active?
   end
   
+  def self.find_all_by_pages
+    self.find_active_by_pages.concat(self.find_inactive)
+  end
+  
   def self.find_active
     @banners = []
     self.find(:all, :order => "name asc").each do |banner|
       @banners << banner if banner.active?
     end
     @banners
+  end
+  
+  def self.find_active_by_pages
+    self.find_active.sort { |a,b| a.pages[0].breadcrumb <=> b.pages[0].breadcrumb }
   end
 
   def self.find_inactive
@@ -45,6 +53,10 @@ class Banner < ActiveRecord::Base
 
   def self.total_inactive_count
     self.find_inactive.size
+  end
+  
+  def remove_all_placements!
+    banner_placements.each { |placement| placement.destroy }
   end
 
   private

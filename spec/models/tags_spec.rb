@@ -37,11 +37,31 @@ describe "BannerRotator::Tags" do
     end
   end
   
-  %w{name background_image foreground_image link_url link_target image_style}.each do |att|
-    describe "<r:banner:#{att}>" do
-      it "should render the '#{att}' attribute of the selected banner" do
-        pages(:home).should render("<r:banner:#{att} />").as(pages(:home)[att])
+  describe "banner attributes, if_ and unless_ tags" do
+    before :each do
+      Page.update_all({:show_banner => true })
+    end
+    %w{name background_image foreground_image link_url link_target image_style}.each do |att|
+      describe "<r:banner:#{att}>" do
+        it "should render the '#{att}' attribute of the selected banner" do
+          pages(:home).should render("<r:banner:#{att} />").as(pages(:home).banners[0][att])
+        end
       end
+      describe "<r:banner:if_#{att}>" do
+        it "should expand the tag contents if the '#{att}' attribute of the selected banner is not blank" do
+          pages(:home).should render("<r:banner:if_#{att}>Content</r:banner:if_#{att}>").as("Content")
+        end
+      end
+      describe "<r:banner:unless_#{att}>" do
+        it "should expand the tag contents if the '#{att}' attribute of the selected banner is blank" do
+          if pages(:another).banners[0][att].blank?
+            pages(:another).should render("<r:banner:unless_#{att}>Content</r:banner:unless_#{att}>").as("Content")
+          else
+            pages(:another).should render("<r:banner:unless_#{att}>Content</r:banner:unless_#{att}>").as("")
+          end
+        end
+      end      
     end
   end
+
 end

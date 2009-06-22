@@ -1,7 +1,7 @@
 module Admin::BannersHelper
 
   def link_or_span_unless_current(params, text, url, options)
-    if options[:id] == params[:view]
+    if options[:id] == params[options[:param]]
       content_tag(:span, text)
     else
       link_to text, url, options
