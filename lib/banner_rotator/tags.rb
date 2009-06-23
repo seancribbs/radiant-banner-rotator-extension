@@ -2,8 +2,10 @@ module BannerRotator::Tags
   include Radiant::Taggable
 
   desc %{
-    Selects a banner from the rotating banners available to this page. If
-    no appropriate banner is found or they are disabled for this page,
+    Selects a banner from the rotating banners available to this page.
+    If no banner is found for this page and banners are enabled, the page
+    will inherit from its parent.  If no banners are found, or they are disabled for this page,
+    then the tag will not be expanded.
 
     *Usage*:
 
