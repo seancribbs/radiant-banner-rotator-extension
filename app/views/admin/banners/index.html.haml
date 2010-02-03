@@ -2,6 +2,8 @@
 
 %h1 Banners
 
+#new=link_to 'New banner', new_admin_banner_url, :class => 'add-link'
+
 %ul#banner_view
   %li#all_view= link_or_span_unless_current(params, "Show All (#{Banner.total_count})", admin_banners_path, :onclick => "Cookies.set('banner_view', 'all');", :param => 'view')
   %li#active_view= link_or_span_unless_current(params, "Show Active Only (#{Banner.total_active_count})", admin_banners_path(:view => 'active'), :onclick => "Cookies.set('banner_view', 'active');", :param => 'view', :id => 'active')
@@ -19,14 +21,13 @@
   - else
     - @banners = Banner.find(:all, :order => 'name asc')
 
-%p{:style => 'float: right; margin-top: -42px'}
-  = link_to 'New banner', new_admin_banner_url, :class => 'add-link'
-
 - unless params[:view] == 'inactive'
   %h4#banner_sort Sort by:
   %ul#banner_sort
     %li#name_sort= link_or_span_unless_current(params, "Banner Name", admin_banners_path, :onclick => "Cookies.set('banner_sort', 'name');", :param => 'sort', :id => 'name')
     %li#page_sort= link_or_span_unless_current(params, "Assigned Pages", admin_banners_path(:sort => 'page'), :onclick => "Cookies.set('banner_sort', 'page');", :param => 'sort', :id => 'page')
+
+#top=render_region :top 
 
 - if @banners.blank?
   %p{:style => 'text-align: center'}
@@ -61,6 +62,8 @@
                 (none)
             %p
 
+= render_region :bottom
+            
 - content_for :page_css do
   :sass
     td.banner
@@ -155,6 +158,11 @@
         background-image: url(/images/admin/text_list_numbers.png)
         background-position: 5px center
         background-repeat: no-repeat
+    #new
+      float: left
+      margin: 0 0 0 0
+    #top
+      margin: 70px 0 0 0
 
     html>body
       #all_view, #active_view, #inactive_view
