@@ -51,9 +51,9 @@
       %br/
       = f.text_field :link_url, :class => 'textbox', :size => 72
     %p
-      = f.label :link_target, "Target window (use _blank for new window)"
+      = f.label :link_target, "Target window (use_top for same window, and _blank for new window)"
       %br/
-      = f.select :link_target, ['', '_blank', '_top']
+      = f.select :link_target, ['_top', '_blank']
     %p
       = f.label :image_style, "Image Style (CSS)"
       %br/
