@@ -1,3 +1,30 @@
+- if @banner.is_protected?
+  %meta{'http-equiv' => 'refresh', :content => "0;URL=#{admin_banners_url}"}
+  - flash[:error] = "Foot-shooting protection enabled:  The #{@banner.name} banner is protected. Please contact a site administrator if it needs to be deleted."
+
+- else
+
+  %h1 Remove Banner
+
+  %p
+    Are you sure you want to
+    %strong.warning permanently remove
+    the following banner?
+
+  %table
+    %tr
+      %td.banner
+        .name= @banner.name
+        .snapshot{:style => "background: url(#{@banner.background_image}) center center no-repeat"}
+          - unless @banner.foreground_image.blank?
+            %img{:src => @banner.foreground_image, :alt => "Preview"}/
+
+  - form_for [:admin, @banner], :html => {:method => :delete} do
+    %p.buttons
+      %input.button{:type=>"submit", :value=>"Delete Banner"}/
+      or
+      = link_to 'Cancel', admin_banners_url
+
 - content_for :page_css do
   :sass
     td.banner
@@ -21,24 +48,3 @@
     a.add-link
       padding-left: 16px
       background: url(/images/admin/plus.png) left center no-repeat
-
-%h1 Remove Banner
-
-%p
-  Are you sure you want to
-  %strong.warning permanently remove
-  the following banner?
-
-%table
-  %tr
-    %td.banner
-      .name= @banner.name
-      .snapshot{:style => "background: url(#{@banner.background_image}) center center no-repeat"}
-        - unless @banner.foreground_image.blank?
-          %img{:src => @banner.foreground_image, :alt => "Preview"}/
-
-- form_for [:admin, @banner], :html => {:method => :delete} do
-  %p.buttons
-    %input.button{:type=>"submit", :value=>"Delete Banner"}/
-    or
-    = link_to 'Cancel', admin_banners_url
